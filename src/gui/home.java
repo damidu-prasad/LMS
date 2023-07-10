@@ -76,7 +76,7 @@ public class home extends javax.swing.JFrame {
         jButton6.setBackground(new java.awt.Color(0, 0, 204));
         jButton6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jButton6.setForeground(new java.awt.Color(0, 255, 255));
-        jButton6.setText("Assignmants");
+        jButton6.setText("Paymants");
         jButton6.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
