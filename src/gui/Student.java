@@ -87,7 +87,7 @@ public class Student extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Student Id", "Student Name", "batch", "Mobile"
+                "Student Id", "Student Name", "batch", "NIC", "Mobile"
             }
         ));
         jTable1.setRowMargin(2);
