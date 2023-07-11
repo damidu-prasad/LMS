@@ -15,6 +15,7 @@ import model.MySql;
  */
 public class Login extends javax.swing.JFrame {
     
+   
     public static String LoggedAcademicName;
     public Login() {
         ImageIcon icon = new ImageIcon("C:\\Users\\damid\\OneDrive\\Documents\\NetBeansProjects\\learningsys\\src\\resource\\ADYAPANA1.PNG");
