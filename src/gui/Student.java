@@ -19,7 +19,8 @@ import javax.swing.table.DefaultTableModel;
 public class Student extends javax.swing.JFrame {
 
     private static String Loadbatch = Student.Loadbatch;
-
+    private String stdname;
+    public static String SelectedStudentID;
     /**
      * Creates new form Student
      */
@@ -27,6 +28,8 @@ public class Student extends javax.swing.JFrame {
         initComponents();
         loadBatch();
     }
+    
+   
 
     private void loadBatch() {
         ResultSet batch = MySql.execute("SELECT * FROM batch ");
@@ -108,6 +111,7 @@ public class Student extends javax.swing.JFrame {
         jTable1.setAutoCreateRowSorter(true);
         jTable1.setBackground(new java.awt.Color(102, 102, 102));
         jTable1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jTable1.setForeground(new java.awt.Color(255, 255, 0));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -127,6 +131,20 @@ public class Student extends javax.swing.JFrame {
         jTable1.setRowMargin(2);
         jTable1.setSelectionBackground(new java.awt.Color(0, 255, 255));
         jTable1.setShowGrid(true);
+        jTable1.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
+                jTable1AncestorAdded(evt);
+            }
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -135,7 +153,6 @@ public class Student extends javax.swing.JFrame {
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 255, 255));
-        jLabel4.setText("Name");
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
@@ -143,11 +160,9 @@ public class Student extends javax.swing.JFrame {
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 255, 255));
-        jLabel6.setText("date");
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(0, 255, 255));
-        jLabel7.setText("number");
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
@@ -159,15 +174,13 @@ public class Student extends javax.swing.JFrame {
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(0, 255, 255));
-        jLabel10.setText("id");
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel11.setText("Adress       :");
+        jLabel11.setText("Address       :");
 
         jLabel12.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(0, 255, 255));
-        jLabel12.setText("home adress");
 
         jLabel13.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(255, 255, 255));
@@ -175,7 +188,6 @@ public class Student extends javax.swing.JFrame {
 
         jLabel14.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(0, 255, 255));
-        jLabel14.setText("Batch name");
 
         jLabel15.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(255, 255, 255));
@@ -215,7 +227,6 @@ public class Student extends javax.swing.JFrame {
             }
         });
 
-        jTextField1.setText("student name or id ");
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField1ActionPerformed(evt);
@@ -458,7 +469,7 @@ public class Student extends javax.swing.JFrame {
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
 
         String selectedBatchName = (String) jComboBox1.getSelectedItem();
-        String query = "SELECT * FROM student WHERE batch_batchID = (SELECT batchID FROM batch WHERE batchName = '" + selectedBatchName + "' ) ";
+        String query = "SELECT * FROM student INNER JOIN batch ON student.batch_batchID=batch.batchID WHERE batchName = '" + selectedBatchName + "' ";
 
         try {
             DefaultTableModel tm = (DefaultTableModel) jTable1.getModel();
@@ -499,7 +510,7 @@ public class Student extends javax.swing.JFrame {
             ResultSet studentData = MySql.execute("SELECT * FROM student INNER JOIN batch ON batch.batchID=student.batch_batchID WHERE sno = '"+studentID+"' ");
             
             if(studentData.next()){
-                 Vector<String> v = new Vector<>();
+                Vector<String> v = new Vector<>();
                 v.add(studentData.getString("sno"));
                 v.add(studentData.getString("name"));
                 v.add(studentData.getString("batchName"));
@@ -511,6 +522,42 @@ public class Student extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jTable1AncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jTable1AncestorAdded
+        // TODO add your handling code here:
+        System.out.println("hiii");
+    }//GEN-LAST:event_jTable1AncestorAdded
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        // TODO add your handling code here:
+        
+        if(evt.getClickCount()==1){
+            int selectedRow=jTable1.getSelectedRow();
+            
+            jLabel4.setText(String.valueOf(jTable1.getValueAt(selectedRow, 1)));
+            jLabel10.setText(String.valueOf(jTable1.getValueAt(selectedRow, 0)));
+            jLabel14.setText(String.valueOf(jTable1.getValueAt(selectedRow, 2)));
+            jLabel7.setText(String.valueOf(jTable1.getValueAt(selectedRow, 3)));
+
+            SelectedStudentID = String.valueOf(jTable1.getValueAt(selectedRow, 0));
+            ResultSet studentData = MySql.execute("SELECT * FROM student  WHERE sno = '"+SelectedStudentID+"' ");
+            
+            try {
+                if(studentData.next()){
+                    
+               
+                jLabel6.setText(studentData.getString("dob"));
+                jLabel12.setText(studentData.getString("address"));
+
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(Student.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
+            
+        }
+    }//GEN-LAST:event_jTable1MouseClicked
 
     public static void main(String[] args) {
         Student s = new Student();

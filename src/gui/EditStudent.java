@@ -9,7 +9,7 @@ package gui;
  * @author damid
  */
 public class EditStudent extends javax.swing.JFrame {
-
+    private static String studentId=Student.SelectedStudentID;
     /**
      * Creates new form EditStudent
      */
