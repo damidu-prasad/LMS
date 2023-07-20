@@ -4,19 +4,40 @@
  */
 package gui;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+import model.MySql;
+
 /**
  *
  * @author damid
  */
 public class Paymants extends javax.swing.JFrame {
 
+    private String SelectedStudentId;
+
     /**
      * Creates new form classShedul
      */
     public Paymants() {
         initComponents();
+        loadMonth();
     }
 
+    private void loadMonth() {
+        ResultSet Month = MySql.execute("SELECT * FROM month ");
+        try {
+            while (Month.next()) {
+                jComboBox1.addItem(Month.getString("month"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Student.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -51,12 +72,9 @@ public class Paymants extends javax.swing.JFrame {
         jButton5 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
-        jLabel19 = new javax.swing.JLabel();
-        jLabel20 = new javax.swing.JLabel();
-        jLabel23 = new javax.swing.JLabel();
-        jLabel24 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
 
         jPanel1.setBackground(new java.awt.Color(102, 102, 102));
 
@@ -72,8 +90,8 @@ public class Paymants extends javax.swing.JFrame {
 
         jTable1.setAutoCreateRowSorter(true);
         jTable1.setBackground(new java.awt.Color(102, 102, 102));
-        jTable1.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(255, 255, 0), new java.awt.Color(255, 255, 0)));
         jTable1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jTable1.setForeground(new java.awt.Color(255, 255, 0));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -85,7 +103,15 @@ public class Paymants extends javax.swing.JFrame {
         jTable1.setRowMargin(2);
         jTable1.setSelectionBackground(new java.awt.Color(0, 255, 255));
         jTable1.setShowGrid(true);
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(2).setMaxWidth(120);
+        }
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
@@ -93,11 +119,11 @@ public class Paymants extends javax.swing.JFrame {
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 255, 255));
-        jLabel4.setText("Name");
+        jLabel4.setText("name");
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(0, 255, 255));
-        jLabel7.setText("number");
+        jLabel7.setText("month");
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
@@ -109,7 +135,7 @@ public class Paymants extends javax.swing.JFrame {
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(0, 255, 255));
-        jLabel10.setText("id");
+        jLabel10.setText("std");
 
         jLabel13.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(255, 255, 255));
@@ -117,11 +143,11 @@ public class Paymants extends javax.swing.JFrame {
 
         jLabel14.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(0, 255, 255));
-        jLabel14.setText("Batch name");
+        jLabel14.setText("batch");
 
         jLabel15.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel15.setText("Paid Amount :");
+        jLabel15.setText("Last Paid Amount :");
 
         jLabel16.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
         jLabel16.setForeground(new java.awt.Color(0, 255, 255));
@@ -137,15 +163,18 @@ public class Paymants extends javax.swing.JFrame {
 
         jLabel21.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel21.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel21.setText("Paid Date :");
+        jLabel21.setText("last Paid Month :");
 
         jLabel22.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
         jLabel22.setForeground(new java.awt.Color(0, 255, 255));
-        jLabel22.setText("11.07.2023");
-
-        jTextField1.setText("student name or id ");
+        jLabel22.setText("month");
 
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/search.png"))); // NOI18N
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jButton4.setText("Edit Last Paymant");
@@ -168,23 +197,11 @@ public class Paymants extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Month :");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "January", "February", "March", "April", "May", "June ", "July", " " }));
-
-        jLabel19.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel19.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel19.setText("Due Amount :");
-
-        jLabel20.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
-        jLabel20.setForeground(new java.awt.Color(0, 255, 255));
-        jLabel20.setText("0000.00");
-
-        jLabel23.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel23.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel23.setText("Due Month :");
-
-        jLabel24.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
-        jLabel24.setForeground(new java.awt.Color(0, 255, 255));
-        jLabel24.setText("january");
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -237,21 +254,12 @@ public class Paymants extends javax.swing.JFrame {
                                 .addComponent(jLabel21)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jLabel19)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jLabel15)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel23)
+                                .addComponent(jLabel15)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addComponent(jButton1))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -296,14 +304,6 @@ public class Paymants extends javax.swing.JFrame {
                             .addComponent(jButton5))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel19)
-                            .addComponent(jLabel20))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel23)
-                            .addComponent(jLabel24))
-                        .addGap(9, 9, 9)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel15)
                             .addComponent(jLabel16))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -331,6 +331,7 @@ public class Paymants extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -346,6 +347,85 @@ public class Paymants extends javax.swing.JFrame {
         up.setVisible(Boolean.TRUE);
         
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+        String selectedMonth = (String) jComboBox1.getSelectedItem();
+        String query = "SELECT * FROM invoice INNER JOIN subject ON invoice.subject_subno=subject.subno INNER JOIN month ON month.id=invoice.month_id INNER JOIN student ON student.sno=invoice.student_sno WHERE month.month= '" + selectedMonth + "' ";
+
+        try {
+            DefaultTableModel tm = (DefaultTableModel) jTable1.getModel();
+            tm.setRowCount(0);
+            ResultSet resultSet = MySql.execute(query);
+
+            while (resultSet.next()) {
+                Vector<String> v = new Vector<>();
+                v.add(resultSet.getString("sno"));
+                v.add(resultSet.getString("value"));
+                v.add(resultSet.getString("description"));
+                v.add(resultSet.getString("paid_date"));
+                v.add(resultSet.getString("mobile"));
+                tm.addRow(v);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+        
+    }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        String studentName = jTextField1.getText();
+
+        try {
+            DefaultTableModel tm = (DefaultTableModel) jTable1.getModel();
+            tm.setRowCount(0);
+
+            ResultSet InvoiceData = MySql.execute("SELECT * FROM invoice INNER JOIN subject ON invoice.subject_subno=subject.subno INNER JOIN month ON month.id=invoice.month_id INNER JOIN student ON student.sno=invoice.student_sno  WHERE student.sno  = '" + studentName + "'  ");
+
+            while(InvoiceData.next()){
+                Vector<String> v = new Vector<>();
+                v.add(InvoiceData.getString("sno"));
+                v.add(InvoiceData.getString("value"));
+                v.add(InvoiceData.getString("description"));
+                v.add(InvoiceData.getString("paid_date"));
+                v.add(InvoiceData.getString("mobile"));
+                tm.addRow(v);
+            }
+        } catch (Exception e) {
+        }
+
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        // TODO add your handling code here:
+        if(evt.getClickCount()==1){
+            int selectedRow=jTable1.getSelectedRow();
+            
+            
+            jLabel10.setText(String.valueOf(jTable1.getValueAt(selectedRow, 0)));
+            jLabel7.setText(String.valueOf(jTable1.getValueAt(selectedRow, 4)));
+           
+
+            SelectedStudentId = String.valueOf(jTable1.getValueAt(selectedRow, 0));
+            ResultSet studentdata = MySql.execute("SELECT * FROM student INNER JOIN batch ON student.batch_batchID=batch.batchID  WHERE sno = '"+SelectedStudentId+"' ");
+            
+            try {
+                if(studentdata.next()){
+                    
+               
+               
+                jLabel4.setText(studentdata.getString("name"));
+                jLabel14.setText(studentdata.getString("batchName"));
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(Student.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
+            
+        }
+    }//GEN-LAST:event_jTable1MouseClicked
 
     /**
      * @param args the command line arguments
@@ -397,13 +477,9 @@ public class Paymants extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel23;
-    private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel7;
